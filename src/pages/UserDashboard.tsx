@@ -1,5 +1,6 @@
 import React from 'react';
-import { Download, Star, Calendar, Shield, Eye } from 'lucide-react';
+import { Star } from 'lucide-react';
+import PurchaseCard from '../components/PurchaseCard';
 
 interface UserDashboardProps {
   user: any;
@@ -107,57 +108,18 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user }) => {
           <h2 className="text-2xl font-semibold mb-6">My Purchases</h2>
           <div className="space-y-6">
             {purchasedItems.map(item => (
-              <div key={item.id} className="bg-gray-900/50 border border-red-900/20 rounded-lg p-6">
-                <div className="flex flex-col lg:flex-row lg:items-center lg:space-x-6">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full lg:w-32 h-32 object-cover rounded-lg mb-4 lg:mb-0"
-                  />
-                  
-                  <div className="flex-1">
-                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4">
-                      <div>
-                        <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                        <p className="text-gray-400 mb-2">by {item.creator}</p>
-                        <div className="flex items-center space-x-4 text-sm text-gray-400">
-                          <div className="flex items-center space-x-1">
-                            <Calendar className="h-4 w-4" />
-                            <span>Purchased {item.purchaseDate}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Shield className="h-4 w-4" />
-                            <span>{item.license} License</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="text-lg font-bold text-red-500 lg:text-right mt-2 lg:mt-0">
-                        ${item.price}
-                      </div>
-                    </div>
-                    
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex items-center space-x-4 text-sm text-gray-400 mb-4 sm:mb-0">
-                        <div className="flex items-center space-x-1">
-                          <Download className="h-4 w-4" />
-                          <span>{item.downloads} downloads</span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex space-x-3">
-                        <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors flex items-center space-x-2">
-                          <Download className="h-4 w-4" />
-                          <span>Download</span>
-                        </button>
-                        <button className="border border-red-600 text-red-400 hover:bg-red-600/10 px-4 py-2 rounded transition-colors">
-                          View License
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <PurchaseCard
+                key={item.id}
+                item={item}
+                onDownload={(id) => {
+                  // placeholder: hook up real download behavior
+                  console.log('download', id);
+                }}
+                onViewLicense={(id) => {
+                  // placeholder: show license modal or navigate to license view
+                  console.log('view-license', id);
+                }}
+              />
             ))}
           </div>
         </div>

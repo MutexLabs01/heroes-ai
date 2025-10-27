@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Star, Eye, Download, Shield, ShoppingCart, Lock, Users, Calendar } from 'lucide-react';
+import { ArrowLeft, Star, Eye, Download, Shield, ShoppingCart, Lock } from 'lucide-react';
 import { marketplaceItems } from '../data/mockData';
+import CreatorCard from '../components/CreatorCard';
+import LicenseSelector from '../components/LicenseSelector';
 
 interface ItemDetailProps {
   cart: any[];
@@ -87,30 +89,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ cart, setCart }) => {
             </div>
 
             {/* Creator Info */}
-            <div className="bg-gray-900/50 border border-red-900/20 rounded-lg p-6">
-              <div className="flex items-center space-x-4 mb-4">
-                <img
-                  src={item.creator.avatar}
-                  alt={item.creator.name}
-                  className="w-12 h-12 rounded-full"
-                />
-                <div>
-                  <h3 className="font-semibold">{item.creator.name}</h3>
-                  <p className="text-gray-400 text-sm">{item.creator.title}</p>
-                </div>
-              </div>
-              <p className="text-gray-300 text-sm">{item.creator.bio}</p>
-              <div className="flex items-center space-x-4 mt-4 text-sm text-gray-400">
-                <div className="flex items-center space-x-1">
-                  <Users className="h-4 w-4" />
-                  <span>{item.creator.followers} followers</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>Joined {item.creator.joinDate}</span>
-                </div>
-              </div>
-            </div>
+            <CreatorCard creator={item.creator} />
           </div>
 
           {/* Right Column - Details and Purchase */}
@@ -139,36 +118,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ cart, setCart }) => {
               </p>
             </div>
 
-            {/* License Selection */}
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">Choose Your License</h3>
-              <div className="space-y-4">
-                {licenseOptions.map(license => (
-                  <div
-                    key={license.type}
-                    className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                      selectedLicense === license.type
-                        ? 'border-red-600 bg-red-600/10'
-                        : 'border-red-900/20 hover:border-red-600/50'
-                    }`}
-                    onClick={() => setSelectedLicense(license.type)}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-semibold">{license.name}</h4>
-                      <div className="text-xl font-bold text-red-500">
-                        ${license.price}
-                      </div>
-                    </div>
-                    <p className="text-gray-300 text-sm mb-3">{license.description}</p>
-                    <ul className="text-sm text-gray-400 space-y-1">
-                      {license.features.map((feature, index) => (
-                        <li key={index}>{feature}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <LicenseSelector price={item.price} selectedLicense={selectedLicense} setSelectedLicense={setSelectedLicense} />
 
             {/* Purchase Actions */}
             <div className="space-y-4">

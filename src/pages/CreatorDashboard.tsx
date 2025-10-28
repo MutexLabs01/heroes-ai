@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, DollarSign, Eye, Download, Plus, Star, TrendingUp, Users } from 'lucide-react';
+import JSZip from 'jszip';
 
 interface CreatorDashboardProps {
   user: any;
@@ -13,8 +14,32 @@ const CreatorDashboard: React.FC<CreatorDashboardProps> = ({ user }) => {
     category: 'character-pack',
     price: '',
     license: 'both',
-    files: null
+    files: null as File | FileList | null
   });
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    // Create ZIP
+    const zip = new JSZip();
+    Array.from(files).forEach((file) => {
+      zip.file(file.name, file);
+    });
+
+    // Generate ZIP file
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    const zipFile = new File([zipBlob], "upload.zip", { type: "application/zip" });
+
+    // Save ZIP file in form state
+    setUploadForm((prev) => ({
+      ...prev,
+      files: zipFile
+    }));
+
+    alert("Files automatically zipped before upload!");
+  };
+
 
   const stats = [
     { label: 'Total Earnings', value: '$2,450', icon: DollarSign, color: 'text-green-500' },
@@ -227,7 +252,7 @@ const CreatorDashboard: React.FC<CreatorDashboardProps> = ({ user }) => {
                       type="file"
                       multiple
                       className="hidden"
-                      onChange={(e) => setUploadForm({...uploadForm, files: e.target.files})}
+                      onChange={handleFileChange}
                     />
                     <button
                       type="button"

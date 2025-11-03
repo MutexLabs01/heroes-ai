@@ -5,7 +5,7 @@ import ItemCard from '../components/ItemCard';
 
 interface MarketplaceProps {
   cart: any[];
-  setCart: (cart: any[]) => void;
+  setCart: (value: any[] | ((prev: any[]) => any[])) => void;
 }
 
 const Marketplace: React.FC<MarketplaceProps> = ({ cart, setCart }) => {
@@ -50,7 +50,15 @@ const Marketplace: React.FC<MarketplaceProps> = ({ cart, setCart }) => {
   });
 
   const addToCart = (item: any) => {
-    setCart([...cart, item]);
+    setCart((prev: any[]) => {
+      const existsIndex = prev.findIndex((p: any) => p.id === item.id && (p.license || '') === (item.license || ''));
+      if (existsIndex >= 0) {
+        const copy = [...prev];
+        copy[existsIndex] = { ...copy[existsIndex], quantity: (copy[existsIndex].quantity || 1) + 1 };
+        return copy;
+      }
+      return [...prev, { ...item, quantity: 1 }];
+    });
   };
 
   const getCategoryLabel = (category: string) => {

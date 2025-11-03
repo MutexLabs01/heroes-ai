@@ -6,10 +6,11 @@ import Marketplace from './pages/Marketplace';
 import ItemDetail from './pages/ItemDetail';
 import CreatorDashboard from './pages/CreatorDashboard';
 import UserDashboard from './pages/UserDashboard';
+import CartPage from './pages/CartPage';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState<any[]>([]);
 
   return (
     <Router>
@@ -21,6 +22,7 @@ function App() {
           <Route path="/item/:id" element={<ItemDetail cart={cart} setCart={setCart} />} />
           <Route path="/creator" element={<CreatorDashboard user={user} />} />
           <Route path="/dashboard" element={<UserDashboard user={user} />} />
+          <Route path="/cart" element={<CartPage cart={cart} setCart={setCart} />} />
         </Routes>
       </div>
     </Router>

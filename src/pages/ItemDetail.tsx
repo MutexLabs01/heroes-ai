@@ -7,7 +7,7 @@ import LicenseSelector from '../components/LicenseSelector';
 
 interface ItemDetailProps {
   cart: any[];
-  setCart: (cart: any[]) => void;
+  setCart: (value: any[] | ((prev: any[]) => any[])) => void;
 }
 
 const ItemDetail: React.FC<ItemDetailProps> = ({ cart, setCart }) => {
@@ -35,7 +35,16 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ cart, setCart }) => {
   };
 
   const addToCart = () => {
-    setCart([...cart, { ...item, license: selectedLicense }]);
+    const payload = { ...item, license: selectedLicense, price: selectedLicenseData.price };
+    setCart((prev: any[]) => {
+      const existsIndex = prev.findIndex((p: any) => p.id === payload.id && (p.license || '') === (payload.license || ''));
+      if (existsIndex >= 0) {
+        const copy = [...prev];
+        copy[existsIndex] = { ...copy[existsIndex], quantity: (copy[existsIndex].quantity || 1) + 1 };
+        return copy;
+      }
+      return [...prev, { ...payload, quantity: 1 }];
+    });
   };
 
   const licenseOptions = [
